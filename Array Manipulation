@@ -1,0 +1,69 @@
+#Initialize an array arr of size n+1 with all elements initially set to 0. This extra element is used to handle the array indexing correctly.
+
+#Loop through each query in the queries list. Each query is represented as a triplet (a, b, k) where a is the starting index, b is the ending index, and k is the value to be added within the range [a, b].
+
+#For each query, add k to the element at index a-1 of the arr (subtracting 1 to handle 0-based indexing). This marks the beginning of the range where the value should be increased.
+
+#Subtract k from the element at index b of the arr. This marks the end of the range where the value should be increased. The subtraction is needed so that when you later calculate the running sum, you can cancel out the increase that was added at index b.
+
+#Initialize variables max_value and running_sum both to 0. These will help keep track of the maximum value and the running sum as you process the array.
+
+#Loop through each element in the modified arr (including the additional element). For each element:
+
+#Add its value to the running_sum.
+#Update max_value to the maximum of its current value and the running_sum.
+#After the loop finishes, max_value will hold the maximum value that the array reaches after all the operations.
+
+#Return max_value.
+
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+#
+# Complete the 'arrayManipulation' function below.
+#
+# The function is expected to return a LONG_INTEGER.
+# The function accepts following parameters:
+#  1. INTEGER n
+#  2. 2D_INTEGER_ARRAY queries
+#
+
+def arrayManipulation(n, queries):
+    arr = [0] * (n + 1)
+    
+    for a, b, k in queries:
+        arr[a - 1] += k  # Add k to the starting index of the range
+        arr[b] -= k      # Subtract k from the element after the ending index
+    
+    max_value = 0
+    running_sum = 0
+    for value in arr:
+        running_sum += value
+        max_value = max(max_value, running_sum)
+    
+    return max_value
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    first_multiple_input = input().rstrip().split()
+
+    n = int(first_multiple_input[0])
+
+    m = int(first_multiple_input[1])
+
+    queries = []
+
+    for _ in range(m):
+        queries.append(list(map(int, input().rstrip().split())))
+
+    result = arrayManipulation(n, queries)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
